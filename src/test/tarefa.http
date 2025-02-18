@@ -1,3 +1,13 @@
-@url = https://stunning-lamp-97665ww4wwq379xw-8080.app.github.dev/
+@url = https://stunning-lamp-97665ww4wwq379xw-8080.app.github.dev
 
-GET {{url}}
+GET {{url}}/tarefas
+
+###
+
+POST {{url}}/tarefas
+Content-Type: application/json
+
+{
+    "id": 2,
+    "descricao": "Estudar Python"
+}
