@@ -1,8 +1,12 @@
 package application.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,5 +28,15 @@ public class TarefaController {
     @PostMapping
     public Tarefa insert(@RequestBody Tarefa novaTarefa) {
         return tarefaRepo.save(novaTarefa);
+    }
+
+    @PutMapping("/{id}")
+    public Tarefa update(@RequestBody Tarefa dados, @PathVariable long id) {
+        Optional<Tarefa> resultado = tarefaRepo.findById(id);
+        if(resultado.isPresent()) {
+            resultado.get().setDescricao(dados.getDescricao());
+            return tarefaRepo.save(resultado.get());
+        }
+        return new Tarefa();
     }
 }

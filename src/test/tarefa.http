@@ -11,3 +11,12 @@ Content-Type: application/json
     "id": 2,
     "descricao": "Estudar Python"
 }
+
+###
+
+PUT {{url}}/tarefas/2
+Content-Type: application/json
+
+{
+    "descricao": "Estudar C#"
+}
