@@ -1,0 +1,26 @@
+@url = https://stunning-lamp-97665ww4wwq379xw-8080.app.github.dev
+
+GET {{url}}/tarefas
+
+###
+
+POST {{url}}/tarefas
+Content-Type: application/json
+
+{
+    "id": 2,
+    "descricao": "Estudar Java"
+}
+
+###
+
+PUT {{url}}/tarefas/2
+Content-Type: application/json
+
+{
+    "descricao": "Estudar C#"
+}
+
+###
+
+DELETE {{url}}/tarefas/2

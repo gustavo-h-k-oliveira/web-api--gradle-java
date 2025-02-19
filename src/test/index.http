@@ -1,3 +1,15 @@
-// GET https://stunning-lamp-97665ww4wwq379xw-8080.app.github.dev/
+// Variável de ambiente: url
+@url = https://stunning-lamp-97665ww4wwq379xw-8080.app.github.dev/
 
-POST https://stunning-lamp-97665ww4wwq379xw-8080.app.github.dev/
+GET {{url}}
+
+###
+
+POST {{url}}
+
+###
+
+POST {{url}}
+Content-Type: text/plain
+
+Laranja
