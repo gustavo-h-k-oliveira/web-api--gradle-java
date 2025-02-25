@@ -18,7 +18,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{url}}/tarefas/2
+PUT {{url}}/tarefas/1
 Content-Type: application/json
 
 {
