@@ -4,12 +4,16 @@ GET {{url}}/tarefas
 
 ###
 
+GET {{url}}/tarefas/1
+
+###
+
 POST {{url}}/tarefas
 Content-Type: application/json
 
 {
-    "id": 2,
-    "descricao": "Estudar Java"
+    "id": 3,
+    "descricao": "Estudar Python"
 }
 
 ###

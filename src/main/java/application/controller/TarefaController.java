@@ -4,12 +4,15 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+// import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import application.model.Tarefa;
@@ -27,6 +30,18 @@ public class TarefaController {
         return tarefaRepo.findAll();
     }
 
+    // Método para buscar uma tarefa pelo ID
+    @GetMapping("/{id}")
+    public Tarefa getOne(@PathVariable long id) {
+        Optional<Tarefa> resultado = tarefaRepo.findById(id);
+        if(resultado.isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Tarefa não encontrada"
+            );
+        }
+        return resultado.get();
+    }
+
     // Método para inserir uma nova tarefa
     @PostMapping
     public Tarefa insert(@RequestBody Tarefa novaTarefa) {
@@ -37,16 +52,23 @@ public class TarefaController {
     @PutMapping("/{id}")
     public Tarefa update(@RequestBody Tarefa dados, @PathVariable long id) {
         Optional<Tarefa> resultado = tarefaRepo.findById(id);
-        if(resultado.isPresent()) {
-            resultado.get().setDescricao(dados.getDescricao());
-            return tarefaRepo.save(resultado.get());
+        if(resultado.isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Tarefa não encontrada"
+            );
         }
-        return new Tarefa();
+        resultado.get().setDescricao(dados.getDescricao());
+        return tarefaRepo.save(resultado.get());
     }
 
     // Método para deletar uma tarefa pelo ID
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
+        if (!tarefaRepo.existsById(id)) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Tarefa não encontrada"
+            );
+        }
         tarefaRepo.deleteById(id);
     }
 }
