@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import application.model.Tarefa;
+import application.record.TarefaDTO;
 import application.repository.TarefaRepository;
 
 @RestController
@@ -26,39 +27,45 @@ public class TarefaController {
 
     // Método para listar todas as tarefas
     @GetMapping
-    public Iterable<Tarefa> list() {
-        return tarefaRepo.findAll();
+    public Iterable<TarefaDTO> list() {
+        return tarefaRepo.findAll().stream().map(TarefaDTO::new).toList();
     }
 
     // Método para buscar uma tarefa pelo ID
     @GetMapping("/{id}")
-    public Tarefa getOne(@PathVariable long id) {
+    public TarefaDTO getOne(@PathVariable long id) {
         Optional<Tarefa> resultado = tarefaRepo.findById(id);
         if(resultado.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Tarefa não encontrada"
             );
         }
-        return resultado.get();
+        return new TarefaDTO(resultado.get());
     }
 
     // Método para inserir uma nova tarefa
     @PostMapping
-    public Tarefa insert(@RequestBody Tarefa novaTarefa) {
-        return tarefaRepo.save(novaTarefa);
+    public TarefaDTO insert(@RequestBody TarefaDTO novaTarefa) {
+        Tarefa novosDados = new Tarefa(novaTarefa);
+        Tarefa tarefaSalva = tarefaRepo.save(novosDados);
+        TarefaDTO retorno = new TarefaDTO(tarefaSalva);
+
+        // return new TarefaDTO(tarefaRepo.save(new Tarefa(novaTarefa)));
+
+        return retorno;
     }
 
     // Método para atualizar uma tarefa existente
     @PutMapping("/{id}")
-    public Tarefa update(@RequestBody Tarefa dados, @PathVariable long id) {
+    public TarefaDTO update(@RequestBody TarefaDTO dados, @PathVariable long id) {
         Optional<Tarefa> resultado = tarefaRepo.findById(id);
         if(resultado.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Tarefa não encontrada"
             );
         }
-        resultado.get().setDescricao(dados.getDescricao());
-        return tarefaRepo.save(resultado.get());
+        resultado.get().setDescricao(dados.descricao());
+        return new TarefaDTO(tarefaRepo.save(resultado.get()));
     }
 
     // Método para deletar uma tarefa pelo ID
